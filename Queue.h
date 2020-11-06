@@ -33,7 +33,7 @@ class Queue{
   int getSize();
   // returns front element
   T* peek();
-}
+};
 
 //default constructor
 template<class T>
