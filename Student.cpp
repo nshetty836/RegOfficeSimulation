@@ -2,7 +2,6 @@
 #include <iostream>
 using namespace std;
 
-
 // default constructor
 Student::Student(){
   waitTime = 0;

@@ -1,4 +1,4 @@
-// #include "DoublyLinkedList.h" // from your code
+#include "DoublyLinkedList.h" // from your code
 #include <iostream>
 using namespace std;
 
@@ -11,7 +11,7 @@ class Queue{
   // destructor
   ~Queue();
 
-  DoublyLinkedList<T> myQueue;
+  DoublyLinkedList<T> *myQueue;
 
   int front;
   int rear;
@@ -22,7 +22,7 @@ class Queue{
   // number of elements
   int totalElements;
 
-  void insert(T *data);
+  void insert(T *d);
   // removing front element in queue
   T* remove();
   // checking if queue is empty
@@ -49,24 +49,25 @@ Queue<T>::Queue(int maxSize){
   front = 0;
   rear = -1;
   totalElements = 0;
+  myQueue = new DoublyLinkedList<T>();
 }
 
 //destructor
 template<class T>
 Queue<T>::~Queue(){
-  delete myQueue; // ? does this work ?
+  delete [] myQueue; // ? does this work ?
 }
 
 //insert element to back of queue
 template<class T>
-void Queue<T>::insert(T data){
-  myQueue -> insertBack(data);
+void Queue<T>::insert(T *d){
+  myQueue -> insertBack(d);
   totalElements++;
 }
 
 // removing front element from queue
 template<class T>
-void Queue<T>::remove(){
+T* Queue<T>::remove(){
   totalElements--;
   return myQueue -> removeFront();
 }
@@ -90,13 +91,13 @@ bool Queue<T>::isFull(){
 
 //returning first element of queue
 template<class T>
-T Queue<T>::peek(){
+T* Queue<T>::peek(){
   return myQueue -> peek();
 }
 
 
 // getting size of queue
 template<class T>
-T Queue<T>::getSize(){
+int Queue<T>::getSize(){
   return totalElements;
 }
