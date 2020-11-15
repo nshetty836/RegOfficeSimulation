@@ -3,13 +3,21 @@ using namespace std;
 
 class Student{
   public:
+    //default constructor
     Student();
+    //overloaded constructor
     Student(int time);
+    //destructor
     ~Student();
-    bool atWindow; // if student is at window or not
+
     int time;
-    int waitTime; // return wait time
-    int getTime(); // returns time
-    int getWaitTime(); // return wait time
-    void addingTimeToWaitList(int t); // adds to the waitlist
+    int waitTime;
+
+    // if student is at window or not / t-f
+    bool atWindow();
+    // returning wait time
+    int getWaitTime();
+    int getTime();
+    // adding time to wait list 
+    void addingTimeToWaitList(int t);
 };

@@ -9,7 +9,7 @@ Student::Student(){
   time = 0;
 }
 
-// overload constructor
+// overloaded constructor
 Student::Student(int t){
   waitTime = 0;
   t = time;
@@ -22,6 +22,7 @@ Student::~Student(){
 bool Student::atWindow(){
   return false;
 }
+
 int Student::getTime(){
   return time;
 }
