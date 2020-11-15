@@ -9,9 +9,9 @@ Student::Student(){
 }
 
 // overloaded constructor
-Student::Student(int t){
+Student::Student(int givenTime){
   waitTime = 0;
-  t = time;
+  time = givenTime;
 }
 
 // destructor

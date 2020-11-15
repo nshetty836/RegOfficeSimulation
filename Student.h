@@ -6,7 +6,7 @@ class Student{
     //default constructor
     Student();
     //overloaded constructor
-    Student(int time);
+    Student(int givenTime);
     //destructor
     ~Student();
 
@@ -18,6 +18,6 @@ class Student{
     // returning wait time
     int getWaitTime();
     int getTime();
-    // adding time to wait list 
+    // adding time to wait list
     void addingTimeToWaitList(int t);
 };
