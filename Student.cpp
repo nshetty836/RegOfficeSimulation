@@ -21,6 +21,7 @@ Student::~Student(){
 // bool Student::atWindow(){
 //   return false;
 // }
+
 int Student::getTime(){
   return time;
 }
