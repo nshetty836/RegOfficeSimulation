@@ -59,7 +59,7 @@ Queue<T>::~Queue(){
 
 //insert element to back of queue
 template<class T>
-void Queue<T>::insert(T *data){
+void Queue<T>::insert(T data){
   myQueue -> insertBack(data);
   totalElements++;
 }
@@ -93,6 +93,7 @@ template<class T>
 T Queue<T>::peek(){
   return myQueue -> peek();
 }
+
 
 // getting size of queue
 template<class T>
