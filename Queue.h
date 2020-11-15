@@ -1,9 +1,11 @@
 #include "DoublyLinkedList.h" // from your code
 #include <iostream>
+#include <cstddef>
 using namespace std;
 
 template <class T>
 class Queue{
+public:
   // default constructor
   Queue();
   // overloaded constructor
@@ -11,7 +13,24 @@ class Queue{
   // destructor
   ~Queue();
 
+<<<<<<< Updated upstream
   DoublyLinkedList<T> *myQueue;
+=======
+  void insert(T data);
+  // removing front element in queue
+  void remove();
+  // checking if queue is empty
+  bool isEmpty();
+  // checking if queue is full
+  T getSize();
+  // returns front element
+  T peek();
+  //prints Queue
+  void print();
+
+private:
+  DoublyLinkedList<T> myQueue;
+>>>>>>> Stashed changes
 
   int front;
   int rear;
@@ -22,6 +41,7 @@ class Queue{
   // number of elements
   int totalElements;
 
+<<<<<<< Updated upstream
   void insert(T *d);
   // removing front element in queue
   T* remove();
@@ -33,6 +53,8 @@ class Queue{
   int getSize();
   // returns front element
   T* peek();
+=======
+>>>>>>> Stashed changes
 };
 
 //default constructor
@@ -55,13 +77,22 @@ Queue<T>::Queue(int maxSize){
 //destructor
 template<class T>
 Queue<T>::~Queue(){
+<<<<<<< Updated upstream
   delete [] myQueue; // ? does this work ?
+=======
+  // delete myQueue; // ? does this work ?
+>>>>>>> Stashed changes
 }
 
 //insert element to back of queue
 template<class T>
+<<<<<<< Updated upstream
 void Queue<T>::insert(T *d){
   myQueue -> insertBack(d);
+=======
+void Queue<T>::insert(T data){
+  myQueue.insertBack(data);
+>>>>>>> Stashed changes
   totalElements++;
 }
 
@@ -69,7 +100,7 @@ void Queue<T>::insert(T *d){
 template<class T>
 T* Queue<T>::remove(){
   totalElements--;
-  return myQueue -> removeFront();
+  return myQueue.removeFront();
 }
 
 //returns true or false - checking whether queue is empty
@@ -83,18 +114,22 @@ bool Queue<T>::isEmpty(){
   }
 }
 
-//returns if true or false -  checking whether queue is full
-template<class T>
-bool Queue<T>::isFull(){
-  return(totalElements == mSize);
-}
 
 //returning first element of queue
 template<class T>
+<<<<<<< Updated upstream
 T* Queue<T>::peek(){
   return myQueue -> peek();
+=======
+T Queue<T>::peek(){
+  return myQueue.getFront();
+>>>>>>> Stashed changes
 }
 
+template<class T>
+void Queue<T>::print(){
+  myQueue.printList();
+}
 
 // getting size of queue
 template<class T>

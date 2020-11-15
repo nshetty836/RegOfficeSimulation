@@ -1,6 +1,7 @@
 using namespace std;
 #include <iostream>
 #include <cstddef>
+#include "List.h"
 
 template <class T>
 class ListNode{
@@ -34,7 +35,7 @@ ListNode<T>::~ListNode(){
 }
 
 template <class T>
-class DoublyLinkedList{
+class DoublyLinkedList: public List<T>{
 //single linked List
   public:
     DoublyLinkedList();
@@ -45,6 +46,7 @@ class DoublyLinkedList{
     T removeBack();
     T deletePos(T pos);
     T removeNode(T key);
+    T getFront();
     void printList();
     T find(T value);
 
@@ -87,7 +89,7 @@ void DoublyLinkedList<T>::insertBack(T d){
   ListNode<T> *node = new ListNode<T>(d);
   if(front == NULL){
     //empty List
-    front = back;
+    front = node;
   }
   else{
     back->next = node;
@@ -140,7 +142,7 @@ T DoublyLinkedList<T>::removeBack(){
   T temp = back->data;
   if(back != NULL){
 
-  	ListNode<T> curr = back;
+  	ListNode<T>* curr = back;
 
   	if(back->prev == NULL)
       back = NULL;
@@ -166,6 +168,12 @@ void DoublyLinkedList<T>::printList(){
     curr = curr -> next;
   }
 }
+
+template <class T>
+T DoublyLinkedList<T>::getFront(){
+  return front->data;
+}
+
 
 //PRINTFROMBACK()
 //if you wanna print from the back, curr would be back and curr = curr->prev
