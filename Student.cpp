@@ -1,5 +1,6 @@
 #include "Student.h"
 #include <iostream>
+#include <string>
 using namespace std;
 
 // default constructor
@@ -33,3 +34,13 @@ int Student::getWaitTime(){
 void Student::addingTimeToWaitList(int t){
   waitTime += t;
 }
+
+string Student::toString(){
+  return to_string(time);
+}
+//
+// ostream & Student::operator<<(const ostream & os, Student & s)
+// {
+//   os << s.waitTime;
+//   return os;
+// }

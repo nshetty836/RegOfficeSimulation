@@ -8,8 +8,6 @@ class Queue{
 public:
   // default constructor
   Queue();
-  // overloaded constructor
-  Queue(int maxSize);
   // destructor
   ~Queue();
 
@@ -24,9 +22,9 @@ public:
   // number of elements
   int totalElements;
 
-  void insert(T d);
+  void insert(T* d);
   // removing front element in queue
-  void remove();
+  T* remove();
   // checking if queue is empty
   bool isEmpty();
   // checking if queue is full
@@ -34,7 +32,7 @@ public:
   // returning size of queue
   int getSize();
   // returns front element
-  T peek();
+  T* peek();
   void print();
 
 };
@@ -47,15 +45,6 @@ Queue<T>::Queue(){
   totalElements = 0;
 }
 
-//overloaded constructor
-template<class T>
-Queue<T>::Queue(int maxSize){
-  front = 0;
-  rear = -1;
-  totalElements = 0;
-  myQueue = new DoublyLinkedList<T>();
-}
-
 //destructor
 template<class T>
 Queue<T>::~Queue(){
@@ -64,17 +53,17 @@ Queue<T>::~Queue(){
 
 //insert element to back of queue
 template<class T>
-void Queue<T>::insert(T data){
+void Queue<T>::insert(T* data){
   myQueue.insertBack(data);
   totalElements++;
 }
 
 // removing front element from queue
 template<class T>
-void Queue<T>::remove(){
+T* Queue<T>::remove(){
   totalElements--;
-  T temp = myQueue.getFront();
-  myQueue.removeFront();
+  return myQueue.removeFront();
+
 }
 
 //returns true or false - checking whether queue is empty
@@ -91,7 +80,7 @@ bool Queue<T>::isEmpty(){
 
 //returning first element of queue
 template<class T>
-T Queue<T>::peek(){
+T* Queue<T>::peek(){
   return myQueue.getFront();
 }
 

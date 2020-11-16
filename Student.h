@@ -1,3 +1,5 @@
+#ifndef STUDENT_H
+#define STUDENT_H
 #include <iostream>
 using namespace std;
 
@@ -20,4 +22,7 @@ class Student{
     int getTime();
     // adding time to wait list
     void addingTimeToWaitList(int t);
+    string toString();
+    // friend ostream & operator<<(const ostream & os, Student & s);
 };
+#endif

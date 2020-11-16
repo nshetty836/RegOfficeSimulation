@@ -7,9 +7,9 @@ template <class T>
 class ListNode{
   public:
     ListNode();
-    ListNode(T d);
+    ListNode(T* d);
     ~ListNode();
-    T data;
+    T* data;
     ListNode<T> *next;
     ListNode<T> *prev;
 };
@@ -22,7 +22,7 @@ ListNode<T>::ListNode(){
 }
 
 template <class T>
-ListNode<T>::ListNode(T d){
+ListNode<T>::ListNode(T* d){
   data = d;
   next = NULL;
   prev = NULL;
@@ -40,20 +40,22 @@ class DoublyLinkedList: public List<T>{
   public:
     DoublyLinkedList();
     ~DoublyLinkedList();
-    void insertFront(T d);
-    void insertBack(T d);
-    void removeFront(); // made this void, maybe fix it if you want to return value
-    T removeBack();
-    T deletePos(T pos);
-    T removeNode(T key);
-    T getFront();
+    void insertFront(T* d);
+    void insertBack(T* d);
+    T* removeFront(); // made this void, maybe fix it if you want to return value
+    T* removeBack();
+    T* deletePos(int pos);
+    T* removeNode(T* key);
+    T* getFront();
+    T* getBack();
     void printList();
-    T find(T value);
+    int find(T* value);
+    T* getAllValues();
 
   private:
     ListNode<T> *front;
     ListNode<T> *back;
-    T size;
+    int size;
 
 };
 
@@ -70,7 +72,7 @@ DoublyLinkedList<T>::~DoublyLinkedList(){
 }
 
 template <class T>
-void DoublyLinkedList<T>::insertFront(T d){
+void DoublyLinkedList<T>::insertFront(T* d){
   ListNode<T> *node = new ListNode<T>(d);
   if(size == 0){
     //empty List
@@ -85,7 +87,7 @@ void DoublyLinkedList<T>::insertFront(T d){
 }
 
 template <class T>
-void DoublyLinkedList<T>::insertBack(T d){
+void DoublyLinkedList<T>::insertBack(T* d){
   ListNode<T> *node = new ListNode<T>(d);
   if(front == NULL){
     //empty List
@@ -100,10 +102,10 @@ void DoublyLinkedList<T>::insertBack(T d){
 }
 
 template <class T>
-void DoublyLinkedList<T>::removeFront(){
+T* DoublyLinkedList<T>::removeFront(){
   ListNode<T>* curr = front;
   if(back == NULL)
-    return;
+    return NULL;
   if(front->next == NULL){
     back = NULL;
   }
@@ -112,50 +114,31 @@ void DoublyLinkedList<T>::removeFront(){
   }
   front = front->next;
   curr->next = NULL;
-  // T temp = curr->data;
+  T* temp = curr->data;
 
   --size;
   delete curr;
+  return temp;
 }
 
 //CHECK THIS MIGHT BE WRONG
 template <class T>
-T DoublyLinkedList<T>::removeBack(){
-  // ListNode *curr = back->prev;
-  // ListNode *nodeToDelete = back;
-  //
-  // int temp = back->data;
-  //
-  // if(front->next == NULL){
-  //   back = NULL;
-  //   front = NULL;
-  // }
-  // else{
-  //   curr->next = NULL;
-  // }
-  // back = curr;
-  // nodeToDelete->prev = NULL;
-  // delete nodeToDelete;
-  // --size;
-  //
-  // return temp;
-  T temp = back->data;
-  if(back != NULL){
+T* DoublyLinkedList<T>::removeBack(){
+  if(back == NULL) return NULL;
 
-  	ListNode<T>* curr = back;
+	ListNode<T>* curr = back;
 
-  	if(back->prev == NULL)
-      back = NULL;
-  	else
-      back->prev->next = NULL;
+	if(back->prev == NULL)
+    back = NULL;
+	else
+    back->prev->next = NULL;
 
-  	back = back->prev;
-  	curr->prev = NULL;
+	back = back->prev;
+  size--;
+  curr->prev = NULL;
+  T* temp = back->data;
 
-    size--;
-
-  	delete curr;
-  }
+	delete curr;
   return temp;
 }
 
@@ -164,32 +147,37 @@ void DoublyLinkedList<T>::printList(){
   ListNode<T> *curr = front;
 
   while(curr != NULL){
-    cout << curr -> data << endl; //printing out data in current pointer
+    cout << curr -> data->toString() << endl; //printing out data in current pointer
     curr = curr -> next;
   }
 }
 
 template <class T>
-T DoublyLinkedList<T>::getFront(){
+T* DoublyLinkedList<T>::getFront(){
+  if(front == NULL) return NULL;
+
   return front->data;
 }
 
+template <class T>
+T* DoublyLinkedList<T>::getBack(){
+  if(back == NULL) return NULL;
 
-//PRINTFROMBACK()
-//if you wanna print from the back, curr would be back and curr = curr->prev
+  return back->data;
+}
 
 template <class T>
-T DoublyLinkedList<T>::find(T value){
-  T pos = -1;
+int DoublyLinkedList<T>::find(T* value){
+  int pos = -1;
   ListNode<T> *curr = front;
 
   while(curr != NULL){
     //iterate until we reach the end and hopefully we find what we're looking for
     ++pos;
-    if(curr->data == value){ //if value is found break the loop
+    if(curr->data == value) //if value is found break the loop
       break;
-    }
-    curr = curr -> next;  //checking next pointer
+    else
+      curr = curr -> next;  //checking next pointer
   }
 
   if(curr == NULL)   //value not found, reset pos to -1
@@ -201,8 +189,8 @@ T DoublyLinkedList<T>::find(T value){
 
 //removing node at a given position
 template <class T>
-T DoublyLinkedList<T>::deletePos(T pos){
-  T p = 0;
+T* DoublyLinkedList<T>::deletePos(int pos){
+  int p = 0;
   ListNode<T> *curr = front;
   ListNode<T> *prev = front;
 
@@ -217,7 +205,7 @@ T DoublyLinkedList<T>::deletePos(T pos){
   prev->next = curr ->next;
   curr->next = NULL;
 
-  T temp = curr->data;
+  T* temp = curr->data;
   size--;
 
   delete curr;
@@ -226,12 +214,12 @@ T DoublyLinkedList<T>::deletePos(T pos){
 
 //searching for node by value and then removing it
 template <class T>
-T DoublyLinkedList<T>::removeNode(T key){
+T* DoublyLinkedList<T>::removeNode(T* key){
   ListNode<T> *curr = front;
 
   //check if empty before proceeding **importanT*
   if(size == 0){
-    return -1;
+    return NULL;
   }
   //if not empty, you can leverage find() to determing if value exists
 
@@ -240,7 +228,7 @@ T DoublyLinkedList<T>::removeNode(T key){
     curr = curr->next;
 
     if(curr == NULL){ //i reached the end of the list and value does not exist
-      return -1;  //exits the function
+      return NULL;  //exits the function
     }
   }
 
@@ -264,7 +252,7 @@ T DoublyLinkedList<T>::removeNode(T key){
   curr->next = NULL;
   curr->prev = NULL;
 
-  T temp = curr->data;
+  T* temp = curr->data;
   size--;
   delete curr;
 

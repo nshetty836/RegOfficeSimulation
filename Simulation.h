@@ -13,8 +13,10 @@ class Simulation{
 
     //calculations for mean etc
     void calculate();
-    // for main 
+    // for main
     void simulation(string file);
+    Queue<Student> *myQueue;
+
 
 
   private:
@@ -40,5 +42,4 @@ class Simulation{
     Student *arrStudent[100]; // array of wait times
     Window *arrWindow[100]; // array of wait times
 
-    Queue<Student> *myQueue;
 };
