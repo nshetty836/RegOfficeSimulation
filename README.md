@@ -30,6 +30,10 @@ How this program compiles:
 g++ *.cpp
 ./a.out
 
-References: 
+References:
 string to int ( stoi() function )
 https://www.techiedelight.com/convert-string-to-int-cpp/
+https://www.tutorialspoint.com/how-to-print-out-the-contents-of-a-vector-in-cplusplus
+https://www.tutorialspoint.com/List-of-Common-Reasons-for-Segmentation-Faults-in-C-Cplusplus
+https://www.cplusplus.com/reference/vector/vector/insert/
+http://www.cplusplus.com/reference/cstdlib/exit/ 
