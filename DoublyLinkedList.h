@@ -3,6 +3,7 @@ using namespace std;
 #include <cstddef>
 #include "List.h"
 
+//List node used to implement the Doubly linked list
 template <class T>
 class ListNode{
   public:
@@ -42,7 +43,7 @@ class DoublyLinkedList: public List<T>{
     ~DoublyLinkedList();
     void insertFront(T* d);
     void insertBack(T* d);
-    T* removeFront(); // made this void, maybe fix it if you want to return value
+    T* removeFront(); 
     T* removeBack();
     T* deletePos(int pos);
     T* removeNode(T* key);
@@ -51,6 +52,7 @@ class DoublyLinkedList: public List<T>{
     void printList();
     int find(T* value);
     T* getAllValues();
+    T* getNode(int index);
 
   private:
     ListNode<T> *front;
@@ -71,6 +73,7 @@ DoublyLinkedList<T>::~DoublyLinkedList(){
   //RESEARCH in ZYBOOKS
 }
 
+//inserts node at front of list
 template <class T>
 void DoublyLinkedList<T>::insertFront(T* d){
   ListNode<T> *node = new ListNode<T>(d);
@@ -86,6 +89,7 @@ void DoublyLinkedList<T>::insertFront(T* d){
   ++size;
 }
 
+//inserts node at back of list
 template <class T>
 void DoublyLinkedList<T>::insertBack(T* d){
   ListNode<T> *node = new ListNode<T>(d);
@@ -101,6 +105,7 @@ void DoublyLinkedList<T>::insertBack(T* d){
   ++size;
 }
 
+//removes front node from list
 template <class T>
 T* DoublyLinkedList<T>::removeFront(){
   ListNode<T>* curr = front;
@@ -121,7 +126,7 @@ T* DoublyLinkedList<T>::removeFront(){
   return temp;
 }
 
-//CHECK THIS MIGHT BE WRONG
+//removes the node at back of the list
 template <class T>
 T* DoublyLinkedList<T>::removeBack(){
   if(back == NULL) return NULL;
@@ -142,6 +147,7 @@ T* DoublyLinkedList<T>::removeBack(){
   return temp;
 }
 
+//prints the entire list
 template <class T>
 void DoublyLinkedList<T>::printList(){
   ListNode<T> *curr = front;
@@ -152,6 +158,7 @@ void DoublyLinkedList<T>::printList(){
   }
 }
 
+//returns the front node of list
 template <class T>
 T* DoublyLinkedList<T>::getFront(){
   if(front == NULL) return NULL;
@@ -159,11 +166,27 @@ T* DoublyLinkedList<T>::getFront(){
   return front->data;
 }
 
+//returns the back node of list
 template <class T>
 T* DoublyLinkedList<T>::getBack(){
   if(back == NULL) return NULL;
 
   return back->data;
+}
+
+template <class T>
+T* DoublyLinkedList<T>::getNode(int index){
+  int pos = 0;
+  ListNode<T> *curr = front;
+
+  while(curr != NULL){
+    if(pos == index){
+      return curr->data;
+    }
+    pos++;
+    curr = curr->next;
+  }
+  return NULL;
 }
 
 template <class T>
@@ -227,7 +250,7 @@ T* DoublyLinkedList<T>::removeNode(T* key){
     //iterate until we reach the end and hopefully we find what we're looking for
     curr = curr->next;
 
-    if(curr == NULL){ //i reached the end of the list and value does not exist
+    if(curr == NULL){ //reached the end of the list and value does not exist
       return NULL;  //exits the function
     }
   }

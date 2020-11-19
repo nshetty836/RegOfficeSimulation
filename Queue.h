@@ -33,6 +33,8 @@ public:
   int getSize();
   // returns front element
   T* peek();
+  T* getValue(int index);
+
   void print();
 
 };
@@ -75,6 +77,11 @@ bool Queue<T>::isEmpty(){
   else {
     return false;
   }
+}
+
+template<class T>
+T* Queue<T>::getValue(int index){
+  return myQueue.getNode(index);
 }
 
 

@@ -6,41 +6,21 @@ using namespace std;
 // default constructor
 Student::Student(){
   waitTime = 0;
-  time = 0;
+  entryTime = 0;
+  windowTime = 0;
 }
 
 // overloaded constructor
-Student::Student(int givenTime){
+Student::Student(int t, int w){
   waitTime = 0;
-  time = givenTime;
+  entryTime = t;
+  windowTime = w;
 }
 
 // destructor
-Student::~Student(){
-}
-
-// bool Student::atWindow(){
-//   return false;
-// }
-
-int Student::getTime(){
-  return time;
-}
-
-int Student::getWaitTime(){
-  return waitTime;
-}
-
-void Student::addingTimeToWaitList(int t){
-  waitTime += t;
-}
+Student::~Student(){}
 
 string Student::toString(){
-  return to_string(time);
+  string temp = "Entry Time: " + to_string(entryTime) + " Window Time: " + to_string(windowTime);
+  return temp;
 }
-//
-// ostream & Student::operator<<(const ostream & os, Student & s)
-// {
-//   os << s.waitTime;
-//   return os;
-// }

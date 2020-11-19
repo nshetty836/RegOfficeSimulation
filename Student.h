@@ -3,26 +3,20 @@
 #include <iostream>
 using namespace std;
 
+//class object of a student that has entry, wait, and window times
 class Student{
   public:
     //default constructor
     Student();
     //overloaded constructor
-    Student(int givenTime);
+    Student(int t, int w);
     //destructor
     ~Student();
 
-    int time;
+    int entryTime;
     int waitTime;
+    int windowTime;
 
-    // if student is at window or not / t-f
-    bool atWindow();
-    // returning wait time
-    int getWaitTime();
-    int getTime();
-    // adding time to wait list
-    void addingTimeToWaitList(int t);
     string toString();
-    // friend ostream & operator<<(const ostream & os, Student & s);
 };
 #endif

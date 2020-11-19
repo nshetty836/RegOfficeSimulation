@@ -1,42 +1,27 @@
 #include <iostream>
+#include "Student.h"
 using namespace std;
 
+//window class to represent one registrar window
 class Window{
   public:
     Window();
-    Window(int t);
+    Window(Student *s);
     ~Window();
 
-    // updating avaliable window
-    void updateAvailable();
-
-    // occupied at the moment
-    void occupiedCurrently();
-    // not occupied at the moment
-    void notOccupiedCurrently();
-    // returning whether window is occupied or not t-f
-    bool getOccupiedCurrently();
-
-    // checking if window is occupied - return t or f
+    int getIdleTime();
+    void notOccupied();
+    void makeOccupied();
     bool isWindowOccupied();
-    // updating occupied window
-    void updateOccupied();
-
-    // adding wait time
-    void addingWaitTime(int t);
-    // returning wait time
     int getWaitTime();
+    void increaseIdleTime();
+    int getWindowTime();
+    void decreaseWindowTime();
 
-    // adding to occupied time
-    void addingOccupiedTime(int t);
-    // returning occupied time
-    int getOccupiedTime();
+    Student *student;
+    int idleTime;
 
   private:
-    // occupied time 
-    int ot;
-    bool current;
     bool occupied;
-    int time;
 
 };

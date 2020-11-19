@@ -4,48 +4,41 @@
 using namespace std;
 
 //default constructor
-Window::Window(){
-  time = 0;
-  ot = 0;
-}
+Window::Window(){}
 
 //overloaded constructor
-Window::Window(int t){
-  time = t;
+Window::Window(Student *s){
   occupied = false;
-  current = false;
-
+  student = s;
+  idleTime = 0;
 }
 
 //destructor
-Window::~Window(){
+Window::~Window(){}
+
+//returning window idle time
+int Window::getIdleTime(){
+  return idleTime;
 }
 
-// window is occupied at the momement
-void Window::occupiedCurrently(){
-  current = true;
-}
-// window is not occupied at the momement
-void Window::notOccupiedCurrently(){
-  current = false;
-}
-// returning whether window is occupied or not
-bool Window::getOccupiedCurrently(){
-  return current;
+void Window::increaseIdleTime(){
+  idleTime++;
 }
 
-//adding window wait time
-void Window::addingWaitTime(int t){
-  time = t;
+int Window::getWindowTime(){
+  return student->windowTime;
 }
 
-//returning window wait time
 int Window::getWaitTime(){
-  return time;
+  return student->waitTime;
+}
+
+void Window::decreaseWindowTime(){
+  student->windowTime -= 1;
 }
 
 //updating window to false = window is busy
-void Window::updateAvailable(){
+void Window::notOccupied(){
   occupied = false;
 }
 
@@ -55,16 +48,6 @@ bool Window::isWindowOccupied(){
 }
 
 //updating window to true = window is empty
-void Window::updateOccupied(){
+void Window::makeOccupied(){
   occupied = true;
-}
-
-//adding to overall occupied time
-void Window::addingOccupiedTime(int t){
-  ot += t;
-}
-
-//returning occupied time
-int Window::getOccupiedTime(){
-  return ot;
 }

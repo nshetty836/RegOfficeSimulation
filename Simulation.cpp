@@ -1,325 +1,232 @@
 #include "Simulation.h"
-#include <iostream>
-#include <fstream>
 using namespace std;
 
 //default constructor
 Simulation::Simulation(){
   numWindows = 0;
   windowTime = 0;
-  windowCount = 0;
 
-  numStudents = -1;
-  minimumWaitTime = 0;
   arrivalTime = 0;
 
   students = 0;
   studentCount = 0;
 
-  myQueue = new Queue<Student>();
+  studentQueue = new Queue<Student>();
 }
 
 //destructor
-Simulation::~Simulation(){
-  delete myQueue;
-}
+Simulation::~Simulation(){}
 
-void Simulation::simulation(string file){
-  //student objects created
-  int numStudentObjects = 1;
-  // file variable first time
-  int first = -1;
-  //file first round
-  int begin = 0;
+//read through file and assign variables to lines
+void Simulation::readFile(string file){
+  FileProcessor *fp = new FileProcessor(file);
 
-  int count = 0;
-  string line;
+  //if file can be opened, read through
+  if(fp->checkFile()){
+    int numLines = fp->getNumOfLines();
+    int lineType = 1;
+    int line = 2;
 
-  //dummy student tester
-  Student *studentTest = new Student();
+    numWindows = stoi(fp->readLine(1));
 
-  // occupied windows at a time
-  int windowOcc[numWindows];
-  //windowOcc counter
-  int windowOccCount = -1;
-
-  ifstream infile(file);
-  while(getline(infile, line)){
-    //number of windows from first line of file
-    if(count == 0){
-      //number of windows being assigned
-      numWindows = stoi(line);
-      arrWindow[numWindows];
-      for(int i = 0; i < numWindows; i++){
-        arrWindow[i] = new Window();
-      }
-      count++;
-      continue;
+    arrWindow[numWindows];
+    for(int i = 0; i < numWindows; i++){
+      arrWindow[i] = new Window(new Student());
     }
 
-    //student arrival time
-    if(count == 1){
-      arrivalTime = stoi(line);
-      count++;
-      continue;
-    }
-
-    if(count == 2){
-      students = stoi(line);
-      studentCount += students;
-      count++;
-      continue;
-    }
-
-    if(count == 3){
-      students = stoi(line);
-      // new student object
-      Student *s = new Student(windowTime);
-      //student placed in queue
-      myQueue->insert(s);
-      if(numStudentObjects < students){
-        numStudentObjects++;
-        continue;
-      }
-
-      //after getting all student times
-      else if(numStudentObjects == students){
-        count = 4;
-        numStudentObjects = 1;
-      }
-    }
-
-    //student at windows
-    if(count = 4){
-      first++;
-      if(first == 0){
-        for(int i = 0; i < numWindows; i++){
-          arrWindow[i]->addingWaitTime(arrivalTime);
-        }
-        begin = arrivalTime;
-      }
-      else{
-        for(int i = 0; i < numWindows; i++){
-          if(arrWindow[i]->isWindowOccupied() == false){
-            arrWindow[i]->addingWaitTime(arrivalTime);
+    //reading through the file to get necessary values for student
+    while(line < numLines){
+      switch (lineType)
+      {
+        //clock tick number in this line
+        case (1):
+        {
+          try
+          {
+            //getting student arrival time
+           	arrivalTime = stoi(fp->readLine(line));
+            lineType++;
+            line++;
           }
-        }
-      }
-
-      //assigning student to a window
-      while(numStudentObjects <= students){
-        if(myQueue->isEmpty()){
-          // queue empty, break
+          catch (exception e)
+          {
+            cout << "\nError in text file.\n" << endl;
+            exit(EXIT_FAILURE);
+          }
           break;
         }
-        //queue not empty
-        else if(myQueue->isEmpty() == false){
-          studentTest = myQueue->remove();
-          numStudents++;
-          numStudentObjects++;
-
-          // windows are full
-          if(windowCount == numWindows){
-            int occupiedTimeOfWindow [numWindows];
-            int windowTrack = 0;
-            //occupied times - current time = minimum time
-            for(int i = 0; i < numWindows; i++){
-              if(first == 0){
-                occupiedTimeOfWindow [i] = arrWindow[i]->getOccupiedTime();
-              }
-              else if(arrWindow[i]->getOccupiedCurrently() == true){
-                occupiedTimeOfWindow [i] = (arrWindow[i]->getOccupiedTime() + arrivalTime) - begin;
-              }
-              else if(arrWindow[i]->getOccupiedCurrently() == false){
-                occupiedTimeOfWindow [i] = (arrWindow[i]->getOccupiedTime() - arrivalTime) + begin;
-              }
+        // Number of students in this line
+        case (2):
+        {
+          //getting number of students
+       		students = stoi(fp->readLine(line));
+          studentCount += students;
+          for (int i = 0; i < students; ++i)
+          {
+            try
+            {
+              line++;
+              windowTime = stoi(fp->readLine(line));
+              if(line > numLines)
+                break;
             }
-            minimumWaitTime = occupiedTimeOfWindow [0];
-            // minimum occupied time
-            for(int i = 1; i < numWindows; i++){
-              if(occupiedTimeOfWindow [i] < minimumWaitTime){
-                minimumWaitTime = occupiedTimeOfWindow [i];
-                windowTrack = i;
-              }
+            catch(exception e)
+            {
+                cout << "\nError in text file.\n" << endl;
+                exit(EXIT_FAILURE);
             }
-
-            if(minimumWaitTime < 0){
-              minimumWaitTime = 0;
-            }
-
-            //adding time to wait list
-            studentTest->addingTimeToWaitList(minimumWaitTime);
-            //adding occupied time
-            arrWindow[windowTrack]->addingOccupiedTime(studentTest->getTime());
-            // window occupied
-            arrWindow[windowTrack]->occupiedCurrently();
-
-            //dummy student in array
-            arrStudent[numStudents] = studentTest;
+            Student* s = new Student(arrivalTime, windowTime);
+            studentQueue->insert(s);
           }
-
-          //loop for number of windows
-          for(int i = 0; i < numWindows; i++){
-            //window not occupied
-            if(arrWindow[i]->isWindowOccupied() == false){
-              arrWindow[i]->occupiedCurrently();
-              windowOccCount++;
-
-              //counting occupied windows
-              windowOcc[windowOccCount] = i;
-
-              //zero wait time if no students
-              studentTest->addingTimeToWaitList(0);
-              arrStudent[numStudents] = studentTest;
-
-              //window occupied
-              arrWindow[i]->updateOccupied();
-              arrWindow[i]->addingOccupiedTime(studentTest->getTime());
-
-              windowCount++;
-              break;
-            }
-
-            // occupied time free if wait time is 0 or less
-            if(arrWindow[i]->getOccupiedTime() - arrivalTime <= 0){
-              arrWindow[i]->updateAvailable();
-              windowCount--;
-            }
-          }
-
-          if(numStudentObjects >= students){
-            count = 5;
-          }
+          // making the next line type as clock tick
+          line++;
+          lineType = 1;
+          break;
         }
       }
     }
-    //going back to count 1
-    if(count == 5){
-      count = 1;
-      numStudentObjects = 1;
-      windowOccCount = -1;
-      for(int i = 0; i < numWindows; i++){
-        if(arrWindow[i]->isWindowOccupied() == false){
-          arrWindow[i]->addingWaitTime(arrivalTime);
-        }
-        arrWindow[i]->notOccupiedCurrently();
-      }
-      for(int i = 0; i < numWindows; i++){
-        windowOcc[i] = -1;
-      }
-      continue;
+  }
+  else{
+    cout << "\nError: text file can not be opened.\n" << endl;
+    exit(EXIT_FAILURE);
+  }
+}
+
+//changes the window and wait times of the students if applicable
+void Simulation::updateTime(int time){
+  for(int i = 0; i < numWindows; ++i){
+    if(arrWindow[i]->isWindowOccupied() == true){
+      arrWindow[i]->decreaseWindowTime();
     }
   }
-
-// file error if the number of student objects isn't 1
-  if(numStudentObjects != 1){
-    cout << "File error - Please check the file " << endl;
-    return;
+  if(studentQueue->getSize() > 0){
+    for(int i = 0; i < studentQueue->getSize(); i++){
+      if(studentQueue->getValue(i)->entryTime < time){
+        studentQueue->getValue(i)->waitTime++;
+      }
+    }
   }
+}
+
+//carry out entire simulation of registrar office
+void Simulation::simulate(string file){
+  bool run = true;
+  int clockTick = 1;
+
+  readFile(file);
+
+  //while loop to go through each clock tick
+  while(true){
+    //if the queue is empty, check if students at windows are done
+    if(studentQueue->isEmpty()){
+      int numDone = 0;
+      for(int i = 0; i < numWindows; i++){
+        if(arrWindow[i]->getWindowTime() < 1){
+          arrWindow[i]->notOccupied();
+          numDone++;
+        }
+      }
+      //if queue and windows are empty, exit loop
+      if(numDone == numWindows){
+        break;
+      }
+    }
+
+    //checking windows and moving student to a window if empty
+    for(int i = 0; i < numWindows; ++i){
+      if(arrWindow[i]->getWindowTime() < 1){
+        if(!studentQueue->isEmpty()){
+          Student *stud = studentQueue->peek();
+          if(stud->entryTime < clockTick){
+            arrWindow[i]->student = studentQueue->remove();
+            arrWindow[i]->makeOccupied();
+            waitTimes.push_back(arrWindow[i]->getWaitTime());
+          }
+        }
+        //if queue is empty, mark the window as not occupied
+        else{
+          arrWindow[i]->notOccupied();
+        }
+      }
+    }
+
+    //if the window is not occupied and window time is 0, increase idle time of window
+    for(int i = 0; i < numWindows; i++){
+      if(arrWindow[i]->isWindowOccupied() == false && arrWindow[i]->getWindowTime() == 0){
+        arrWindow[i]->increaseIdleTime();
+      }
+    }
+
+    updateTime(clockTick);
+    clockTick++;
+  }
+
+  //calculate stats after simulation is over
   calculate();
 }
 
 // calculations
 void Simulation::calculate(){
-  // student wait time mean
-  float natural = 0;
-  // mean counter
-  float m = 0;
-  for(int i = 0; i < studentCount; i++){
-    natural += arrStudent[i]->getWaitTime();
-    m++;
-  }
+  float meanWait = 0, meanIdle = 0;
+  int meanSize = 0, idleSize = 0, size = waitTimes.size();
+  int median;
 
-  // 0/n
-  if(natural == 0.0){
-    natural = 0.0;
-  }
-  else
-  {
-    //mean is n - not zero
-    natural  = natural/m;
-  }
-  cout << "The mean student wait time : " << natural << endl;
-  // student wait time median
-  float median = 0.0f;
-  int med;
-  // wait times in array in order
-  int medianArr[studentCount];
-
-  for(int i = 0 ; i < studentCount; i++){
-    medianArr[i] = arrStudent[i]->getWaitTime();
-  }
-  // ordering array
-  for(int i = 0; i < studentCount; i++ ){
-    for(int j = i + 1; j < studentCount ; j++){
-      if(medianArr[i] < medianArr[j]){
-        median = medianArr[i];
-        medianArr[i] = medianArr[j];
-        medianArr[j] = median;
-      }
+  //finding mean wait time value
+  for(int i = 0; i < size; i++){
+    if(waitTimes.at(i) != 0){
+      meanSize++;
+      meanWait += waitTimes.at(i);
     }
   }
-  numStudents++;
+  if(meanSize == 0)
+    meanWait = 0;
+  else
+    meanWait = meanWait/meanSize;
 
-// remainder
-  med = numStudents%2;
+  //finding median value by sorting vector
+  sort(waitTimes.begin(), waitTimes.end());
+  median = waitTimes[size / 2];
 
-//if remainder
-  if(med == 1){
-    med = (numStudents/2);
-    cout << "The median for student wait time is: " << medianArr[med] << endl;
-  }
-  else{
-    med = (numStudents/2);
-    median = ((medianArr[med + 1] + medianArr[med]) /2);
-    cout << "The median student wait time : " << median << endl;
-  }
-  cout << "The longest student wait time : " << medianArr[0] << endl;
-
+  //finding number of students with wait time over 10 minutes
   int tenMinStudent = 0;
-  for(int i = 0 ; i < studentCount ; i++){
-    if (medianArr[i] >= 10){
+  for(int i = 0; i < size; i++){
+    if(waitTimes[i] > 10){
       tenMinStudent++;
     }
-	}
+  }
+  cout << "\nThe mean student wait time : " << fixed << setprecision(2) << meanWait << endl;
+  cout << "The median student wait time : " << median << endl;
+  cout << "The longest student wait time : " << waitTimes.back() << endl;
   cout << "The number of students waiting over 10 minutes : " << tenMinStudent << endl;
-  cout << endl;
 
-  //window idle time mean
-  int meanWindow[numWindows];
-  float windowSum = 0.0;
-
+  // adding idle times to vector
   for(int i = 0; i < numWindows; i++){
-    // getting wait time
-    meanWindow[i] = arrWindow[i]->getWaitTime();
-  }
-  for(int i = 0; i < numWindows; i++){
-    windowSum += meanWindow[i];
+    idleTimes.push_back(arrWindow[i]->getIdleTime());
   }
 
-  float windowMean = windowSum / numWindows;
+  //finding the mean idle time
+  for(int i = 0; i < idleTimes.size(); i++){
+    if(idleTimes.at(i) != 0){
+      idleSize++;
+      meanIdle += idleTimes.at(i);
+    }
+  }
+  if(meanIdle == 0)
+    meanIdle = 0;
+  else
+    meanIdle = meanIdle/idleSize;
 
-  cout << "The mean window idle time : " << windowMean << endl;
-
-  // dummy window counter test
-  int windowTest = 0;
-
-  for(int i = 0; i < numWindows; i++ ){
-    for(int j = i + 1; j < numWindows; j++){
-      if(meanWindow[i] < meanWindow[j]){
-        windowTest = meanWindow[i];
-        meanWindow[i] = meanWindow[j];
-        meanWindow[j] = windowTest;
+    //finding num of windows with idle time
+    int fiveMinIdle = 0;
+    for(int i = 0; i < idleTimes.size(); i++){
+      if(idleTimes[i] > 5){
+        fiveMinIdle++;
       }
     }
-  }
-  cout << "The longest window idle time : " << meanWindow[0] << endl;
-  int fiveMinStudent = 0;
-  for(int i = 0 ; i < numWindows; i++){
-    if (meanWindow[i] >= 5){
-      fiveMinStudent++;
-    }
-	}
-  cout << "Number of windows idle for over 5 minutes : " << fiveMinStudent << endl;
-  cout << endl;
+
+    sort(idleTimes.begin(), idleTimes.end());
+
+    cout << "The mean window idle time : " << fixed << setprecision(2) << meanIdle << endl;
+    cout << "The longest window idle time : " << idleTimes.back() << endl;
+    cout << "Number of windows idle for over 5 minutes : " << fiveMinIdle << "\n" << endl;
 }

@@ -1,7 +1,10 @@
 #include "Queue.h"
 #include "Student.h"
 #include "Window.h"
-#include <iostream>
+#include "FileProcessor.h"
+#include <vector>
+#include <algorithm>
+#include <iomanip>
 using namespace std;
 
 class Simulation{
@@ -11,35 +14,26 @@ class Simulation{
     //destructor
     ~Simulation();
 
-    //calculations for mean etc
     void calculate();
-    // for main
-    void simulation(string file);
-    Queue<Student> *myQueue;
+    void readFile(string file);
+    void simulate(string file);
+    void updateTime(int time);
 
-
+    Queue<Student> *studentQueue;
+    vector<int> waitTimes;
+    vector<int> idleTimes;
 
   private:
     int students;
-    // counter for window
-
-    int windowCount;
     // number of windows
     int numWindows;
-
-    // number of students
-    int numStudents;
     // counter for student
     int studentCount;
-
     // student arrival time
     int arrivalTime;
     // how long student spends at window
     int windowTime;
-    // minimum wait time for window
-    int minimumWaitTime;
 
-    Student *arrStudent[100]; // array of wait times
     Window *arrWindow[100]; // array of wait times
 
 };
