@@ -2,12 +2,13 @@
 #include <cstddef>
 using namespace std;
 
+//general list interface class to overload with any list type
 template <class T>
 class List{
 
   virtual void insertFront(T* d) = 0;
   virtual void insertBack(T* d) = 0;
-  virtual T* removeFront() = 0; // made this void, maybe fix it if you want to return value
+  virtual T* removeFront() = 0;
   virtual T* removeBack() = 0;
   virtual T* deletePos(int pos) = 0;
   virtual T* removeNode(T* key) = 0;
